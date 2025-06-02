@@ -2,3 +2,4 @@ jc-terransible/.terraform/
 jc-terransible/.terraform.lock.hcl
 jc-terransible/terraform.tfstate
 terraform.tfstate
+jc-terransible/terraform.tfstate.backup
