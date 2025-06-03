@@ -3,3 +3,6 @@ jc-terransible/.terraform.lock.hcl
 jc-terransible/terraform.tfstate
 terraform.tfstate
 jc-terransible/terraform.tfstate.backup
+jc-terransible/variables.tf
+jc-terransible/dev.tfvars
+jc-terransible/prod.tfvars
