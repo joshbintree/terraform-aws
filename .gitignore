@@ -6,3 +6,4 @@ jc-terransible/terraform.tfstate.backup
 jc-terransible/variables.tf
 jc-terransible/dev.tfvars
 jc-terransible/prod.tfvars
+jc-terransible/terraform.tfvars
