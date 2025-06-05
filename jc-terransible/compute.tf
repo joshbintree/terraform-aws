@@ -12,6 +12,11 @@ resource "random_id" "jc_node_id" {
     count = var.main_instance_count
 }
 
+resource "aws_key_pair" "jc_auth" {
+    key_name = var.key_name
+    public_key = file(var.public_key_path)
+}
+
 resource "aws_instance" "jc_main" {
     count = var.main_instance_count
     instance_type = var.main_instance_type
