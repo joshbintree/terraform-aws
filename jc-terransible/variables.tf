@@ -22,3 +22,15 @@ variable main_instance_count {
     type = number
     default = 1
 }
+
+variable key_name {
+    description = "name of ssh key pair"
+    type = string
+    default = "terransible-key"
+
+}
+
+variable public_key_path {
+    type = string
+    default = "./jc-terransible.pub"
+}
