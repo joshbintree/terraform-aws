@@ -21,7 +21,7 @@ resource "aws_instance" "jc_main" {
   count                  = var.main_instance_count
   instance_type          = var.main_instance_type
   ami                    = data.aws_ami.server_ami.id
-  key_name               = aws_key_pair.jc_auth.id
+  key_name               = aws_key_pair.jc_auth.key_name
   vpc_security_group_ids = [aws_security_group.jc_sg.id]
   subnet_id              = aws_subnet.jc_public_subnet[count.index].id
   user_data              = templatefile("./main-userdata.tpl", { new_hostname = "jc-main-${random_id.jc_node_id[count.index].dec}" })
