@@ -1,0 +1,34 @@
+---
+- name: install grafana
+  hosts: hosts
+  become: yes
+
+  tasks:
+   - name: download apt key
+     ansible.builtin.apt_key:
+       url: https://packages.grafana.com/gpg.key
+       state: present
+   - name: Add grafana repo to sources.list
+     ansible.builtin.apt_repository:
+       repo: deb https://packages.grafana.com/oss/deb stable main
+       filename: grafana
+       state: present
+   - name: update apt cache and install grafana
+     ansible.builtin.apt:
+       name: grafana
+       update_cache: yes
+   - name: ensure Grafana is starated and enabled
+     ansible.builtin.service:
+       state: started
+       enabled: yes
+       name: grafana-server
+
+# #!/bin/bash
+# sudo hostnamectl set-hostname ${new_hostname} &&
+# sudo apt-get install -y apt-transport-https software-properties-common wget &&
+# wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add - &&
+# echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+# sudo apt-get -y update &&
+# sudo apt-get -y install grafana &&
+# sudo systemctl start grafana-server &&
+# sudo systemctl enable grafana-server.service
