@@ -1,6 +1,6 @@
 ---
-- name: Remove grafana
-  hosts: hosts
+- name: Bootstrap main node
+  hosts: main
   become: yes
 
   tasks:

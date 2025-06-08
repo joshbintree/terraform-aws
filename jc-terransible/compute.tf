@@ -34,7 +34,7 @@ resource "aws_instance" "jc_main" {
   }
 
   provisioner "local-exec" {
-   command = "echo ${self.public_ip} >> aws_hosts"
+   command = "echo ${self.public_ip} >> aws_hosts && aws ec2 wait instance-status-ok --instance-ids ${self.id} --region us-west-2"
 }
   provisioner "local-exec" {
     when = destroy 
@@ -59,6 +59,6 @@ resource "aws_instance" "jc_main" {
 resource "null_resource" "grafana_install" {
     depends_on = [aws_instance.jc_main]
     provisioner "local-exec" {
-        command = "ansible-playbook -i aws_hosts --key-file jc-terransible playbooks/grafana.yml"
+        command = "ansible-playbook -i aws_hosts playbooks/grafana.yml"
     }
 }

@@ -1,0 +1,91 @@
+---
+- name: install grafana
+  hosts: main
+  become: yes
+  vars:
+    listen_address: 0.0.0.0
+    listen_port: 9000
+
+  tasks:
+   - name: download apt key
+     ansible.builtin.apt_key:
+       url: https://packages.grafana.com/gpg.key
+       state: present
+   - name: Add grafana repo to sources.list
+     ansible.builtin.apt_repository:
+       repo: deb https://packages.grafana.com/oss/deb stable main
+       filename: grafana
+       state: present
+   - name: update apt cache and install grafana
+     ansible.builtin.apt:
+       name: grafana
+       update_cache: yes
+   - name: ensure Grafana is starated and enabled
+     ansible.builtin.service:
+       state: started
+       enabled: yes
+       name: grafana-server
+
+   - name: Download Promethesus
+     ansible.builtin.get_url:
+       url: https://github.com/prometheus/prometheus/releases/download/v3.4.1/prometheus-3.4.1.darwin-amd64.tar.gz
+       dest: /home/ubuntu
+
+   - name: Extract Prom Resources
+     ansible.builtin.unarchive:
+       src: /home/ubuntu/prometheus-3.4.1.darwin-amd64.tar.gz
+       dest: /home/ubuntu
+       remote_src: yes
+   - name: Create prom Group
+     ansible.builtin.group:
+       name: prometheus
+       state: present
+   - name: Create prom User
+     ansible.builtin.user:
+       name: prometheus
+       group: prometheus
+       shell: /sbin/nologin
+   - name: Create Prom Directories
+     ansible.builtin.file:
+       path: "{{ item }}"
+       state: directory
+       recurse: yes
+       owner: prometheus
+       group: prometheus
+       mode: "0755"
+     loop:
+       - /etc/prometheus
+       - /etc/prometheus/rules
+       - /etc/prometheus/rules.d
+       - /etc/prometheus/files_sd
+       - /var/lib/prometheus
+
+   - name: Copy Files
+     ansible.builtin.copy:
+       src: "{{ item }}"
+       dest: /usr/local/bin
+       remote_src: yes
+       mode: '0755'
+       owner: prometheus
+       group: prometheus
+     loop:
+       - /home/ubuntu/prometheus-3.4.1.darwin-amd64/prometheus
+       - /home/ubuntu/prometheus-3.4.1.darwin-amd64/promtool
+
+
+
+   - name: Create Config Files
+     ansible.builtin.template:
+       src: prometheus.yml.j2
+       dest: /etc/prometheus/prometheus.yml
+
+  #  - name: Create Systemd Files
+  #    ansible.builtin.template:
+  #      src: prometheus.service.j2
+  #      dest: /etc/systemd/system/prometheus.service
+
+  #  - name: Ensure Promethesus is running
+  #    ansible.builtin.systemd:
+  #     state: started
+  #     enabled: yes
+  #     name: prometheus
