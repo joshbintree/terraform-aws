@@ -1,6 +1,6 @@
 ---
 - name: install grafana
-  hosts: hosts
+  hosts: main
   become: yes
 
   tasks:
