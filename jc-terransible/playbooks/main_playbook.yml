@@ -7,6 +7,35 @@
     listen_port: 9000
 
   tasks:
+   - name: Install Java
+     apt:
+       name: openjdk-21-jre
+       state: present
+       update_cache: yes
+   - name: install fontconfig
+     apt:
+       name: fontconfig
+       state: present
+       update_cache: yes
+   - name: download jenkins apt key
+     ansible.builtin.apt_key:
+       url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+       state: present
+   - name: Add jenkins repo to sources.list
+     ansible.builtin.apt_repository:
+       repo: deb https://pkg.jenkins.io/debian-stable binary/
+       state: present
+       filename: jenkins
+   - name: Update apt cache and install jenkins
+     apt:
+       name: jenkins
+       update_cache: yes
+   - name: Ensure Jenkins is started and enabled
+     ansible.builtin.service:
+       name: jenkins
+       enabled: yes
+       state: started
+
    - name: download apt key
      ansible.builtin.apt_key:
        url: https://packages.grafana.com/gpg.key

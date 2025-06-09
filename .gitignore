@@ -10,4 +10,6 @@ jc-terransible/terraform.tfvar
 jc-terransible/jc-terransible
 jc-terransible/jc-terransible.pub
 jc-terransible/playbooks/group_vars/*
-jc-terransible/aws_hosts
+jc-terransible/aws_host
+jc-terransible.2025-06-08.private-key.pem
+converted-github-app.pem
