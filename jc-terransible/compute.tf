@@ -56,9 +56,9 @@ resource "aws_instance" "jc_main" {
 #
 #}
 
-resource "null_resource" "main_ansible_install" {
-    depends_on = [aws_instance.jc_main]
-    provisioner "local-exec" {
-        command = "ansible-playbook -i aws_hosts playbooks/main_playbook.yml"
-    }
-}
+#resource "null_resource" "main_ansible_install" {
+#    depends_on = [aws_instance.jc_main]
+#    provisioner "local-exec" {
+#        command = "ansible-playbook -i aws_hosts playbooks/main_playbook.yml"
+#    }
+#}
